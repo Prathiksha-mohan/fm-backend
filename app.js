@@ -5,6 +5,15 @@ const bodyParser = require('body-parser');
 const path = require("path");
 
 require('dotenv').config({ path: './config/config.env' });
+app.use(cors({
+  origin: [
+    'http://localhost:5173', // Vite dev
+    'https://f-market.netlify.app' 
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  
+}));
+app.use(express.json());
 
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
@@ -21,21 +30,8 @@ const orderRoutes = require("./routes/orderRoutes");
 
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({
-  origin: [
-    'http://localhost:5173', // Vite dev
-    'https://f-market.netlify.app' 
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  
-}));
-app.use(express.json());
 
-// Dummy auth middleware (replace with real auth)
-app.use((req, res, next) => {
-  req.user = { id: 1, username: 'testbuyer' }; // hardcoded for testing
-  next();
-});
+
 
 // Serve uploaded images statically
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
